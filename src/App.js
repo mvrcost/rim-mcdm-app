@@ -43,7 +43,7 @@ function App() {
       return;
     }
     try {
-      console.log("Dados recebidos:", jsonStr);
+      console.log(jsonStr);
       const getResults = pyodide.globals.get("get_results");
       const resultString = getResults(jsonStr);
       setResults(JSON.parse(resultString));
