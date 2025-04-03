@@ -11,7 +11,7 @@ function InputForm({ onSubmit }) {
   const [criteriaTypes, setCriteriaTypes] = useState({
     C1: "max",
     C2: "max",
-    C3: "min",
+    C3: "max",
   });
   const [performanceMatrix, setPerformanceMatrix] = useState({
     A1: [7, 9, 8],
@@ -84,7 +84,7 @@ function InputForm({ onSubmit }) {
           type="text"
           value={alternatives.join(", ")}
           onChange={(e) =>
-            setAlternatives(e.target.value.split(", ").map((item) => item.trim()))
+            setAlternatives(e.target.value.split(",").map((item) => item.trim()))
           }
           required
         />
@@ -96,7 +96,7 @@ function InputForm({ onSubmit }) {
           type="text"
           value={criteria.join(", ")}
           onChange={(e) =>
-            setCriteria(e.target.value.split(", ").map((item) => item.trim()))
+            setCriteria(e.target.value.split(",").map((item) => item.trim()))
           }
           required
         />
@@ -110,14 +110,14 @@ function InputForm({ onSubmit }) {
             step="0.1"
             min="0"
             max="1"
-            value={weights[crit]}
+            value={weights[crit] || ""}
             onChange={(e) =>
               setWeights({ ...weights, [crit]: parseFloat(e.target.value) })
             }
             required
           />
           <select
-            value={criteriaTypes[crit]}
+            value={criteriaTypes[crit] || "max"}
             onChange={(e) =>
               setCriteriaTypes({ ...criteriaTypes, [crit]: e.target.value })
             }
@@ -129,15 +129,15 @@ function InputForm({ onSubmit }) {
       ))}
 
       <h3>Matriz de Desempenho</h3>
-      {alternatives.map((alt, altIdx) => (
+      {Object.entries(performanceMatrix).map(([alt, values], altIdx) => (
         <div key={altIdx}>
           <h4>{alt}</h4>
-          {criteria.map((crit, critIdx) => (
+          {values.map((value, critIdx) => (
             <div key={critIdx}>
-              <label>{crit}</label>
+              <label>{criteria[critIdx]}</label>
               <input
                 type="number"
-                value={performanceMatrix[alt][critIdx]}
+                value={value || ""}
                 onChange={(e) =>
                   handleMatrixChange(alt, critIdx, e.target.value)
                 }
@@ -149,18 +149,18 @@ function InputForm({ onSubmit }) {
       ))}
 
       <h3>Intervalos</h3>
-      {criteria.map((crit, idx) => (
+      {Object.entries(intervals).map(([crit, range], idx) => (
         <div key={idx}>
           <label>Intervalo de {crit}</label>
           <input
             type="number"
-            value={intervals[crit][0]}
+            value={range[0] || ""}
             onChange={(e) => handleIntervalChange(crit, 0, e.target.value)}
             required
           />
           <input
             type="number"
-            value={intervals[crit][1]}
+            value={range[1] || ""}
             onChange={(e) => handleIntervalChange(crit, 1, e.target.value)}
             required
           />
@@ -168,18 +168,18 @@ function InputForm({ onSubmit }) {
       ))}
 
       <h3>Ideais de Referência</h3>
-      {criteria.map((crit, idx) => (
+      {Object.entries(referenceIdeals).map(([crit, ideals], idx) => (
         <div key={idx}>
           <label>Ideal de {crit}</label>
           <input
             type="number"
-            value={referenceIdeals[crit][0]}
+            value={ideals[0] || ""}
             onChange={(e) => handleReferenceChange(crit, 0, e.target.value)}
             required
           />
           <input
             type="number"
-            value={referenceIdeals[crit][1]}
+            value={ideals[1] || ""}
             onChange={(e) => handleReferenceChange(crit, 1, e.target.value)}
             required
           />
