@@ -21,17 +21,28 @@ function InputForm({ onSubmit }) {
       alert("Por favor, insira pelo menos uma alternativa e um critério.");
       return;
     }
-
     onSubmit({
-      alternatives,
-      criteria,
-      weights,
-      criteriaTypes,
-      performanceMatrix: {
-        A1: [7, 9, 8],
-        A2: [6, 8, 9],
-        A3: [8, 7, 6],
-      },
+      "method": "RIM",
+      "parameters": {
+        "alternatives": alternatives,
+        "criteria": criteria,
+        "performance_matrix": {
+          "A1": [7, 9, 8],
+          "A2": [6, 8, 9],
+          "A3": [8, 7, 6]
+        },
+        "weights": weights,
+        "intervals": {
+          "C1": [5, 10],
+          "C2": [6, 10],
+          "C3": [5, 10]
+        },
+        "reference_ideals": {
+          "C1": [7, 9],
+          "C2": [8, 9],
+          "C3": [6, 7]
+        }
+      }
     });
   };
 

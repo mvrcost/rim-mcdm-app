@@ -56,12 +56,21 @@ form button:hover {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  max-width: 600px;
+  max-width: 800px; 
   margin: 20px auto;
 }
 
-.ranking, .weights {
+.results h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.ranking, .weights, .weighted-matrix {
   margin-top: 20px;
+}
+
+.ranking ol {
+  padding-left: 20px;
 }
 
 table {
@@ -74,4 +83,31 @@ table th, table td {
   border: 1px solid #ddd;
   padding: 8px;
   text-align: center;
+}
+
+table th {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
+table td {
+  background-color: #fff;
+}
+
+.weighted-matrix table {
+  margin-top: 15px;
+}
+
+.weighted-matrix th:first-child, 
+.weighted-matrix td:first-child {
+  text-align: left;
+  font-weight: bold;
+}
+
+.weighted-matrix th {
+  background-color: #e6f7ff;
+}
+
+.weighted-matrix td {
+  background-color: #f9f9f9;
 }

@@ -1,13 +1,15 @@
 function ResultsDisplay({ results }) {
   return (
     <div className="results">
-      <h2>Resultados do Método RIM</h2>
+      <h2>Resultados do Método {results.method}</h2>
       
       <div className="ranking">
         <h3>Ranking:</h3>
         <ol>
-          {results.ranking.map((alt, idx) => (
-            <li key={idx}>{alt} (Score: {results.scores[alt].toFixed(2)})</li>
+          {results.results.ranking.map((alt, idx) => (
+            <li key={idx}>
+              {alt} (Score: {results.results.scores[alt].toFixed(2)})
+            </li>
           ))}
         </ol>
       </div>
@@ -17,17 +19,43 @@ function ResultsDisplay({ results }) {
         <table>
           <thead>
             <tr>
-              {Object.keys(results.normalized_weights).map((crit, idx) => (
+              {Object.keys(results.results.weights).map((crit, idx) => (
                 <th key={idx}>{crit}</th>
               ))}
             </tr>
           </thead>
           <tbody>
             <tr>
-              {Object.values(results.normalized_weights).map((weight, idx) => (
-                <td key={idx}>{weight}</td>
+              {Object.values(results.results.weights).map((weight, idx) => (
+                <td key={idx}>{weight.toFixed(2)}</td>
               ))}
             </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div className="weighted-matrix">
+        <h3>Matriz Ponderada Normalizada:</h3>
+        <table>
+          <thead>
+            <tr>
+              <th>Alternativa</th>
+              {Object.keys(results.results.weights).map((crit, idx) => (
+                <th key={idx}>{crit}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {Object.entries(results.results.weighted_normalized_matrix).map(
+              ([alt, values], idx) => (
+                <tr key={idx}>
+                  <td>{alt}</td>
+                  {values.map((value, valueIdx) => (
+                    <td key={valueIdx}>{value.toFixed(5)}</td>
+                  ))}
+                </tr>
+              )
+            )}
           </tbody>
         </table>
       </div>
