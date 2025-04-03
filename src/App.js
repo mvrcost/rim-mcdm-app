@@ -12,7 +12,7 @@ function App() {
     async function loadPyodideAndPackages() {
       try {
         const pyodideInstance = await window.loadPyodide();
-        await pyodideInstance.loadPackage(["micropip", "numpy"]);
+        await pyodideInstance.loadPackage(["micropip", "numpy", "pandas"]);
         
         await pyodideInstance.runPythonAsync(`
           import micropip
@@ -20,6 +20,7 @@ function App() {
           await micropip.install("vikor-cin")
           await micropip.install("topsis_cin", deps=False)
           await micropip.install("rim-cin", deps=False)
+          await micropip.install("ftopsis_class_cin", deps=False)
           await micropip.install("sad-cin", deps=False)
 
           from sad_cin import decision_support
