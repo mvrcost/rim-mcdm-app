@@ -11,20 +11,25 @@ function App() {
   useEffect(() => {
     async function loadPyodideAndPackages() {
       try {
-        const pyodideInstance = await window.loadPyodide({
-          packages: ["numpy"]
-        });
-    
+        const pyodideInstance = await window.loadPyodide();
+        await pyodideInstance.loadPackage(["micropip", "numpy"]);
+        
         await pyodideInstance.runPythonAsync(`
           import micropip
-          await micropip.install("sad-cin")
+          await micropip.install("vikor-cin")
+          await micropip.install("topsis_cin", deps=False)
+          await micropip.install("rim-cin", deps=False)
+          await micropip.install("sad-cin", deps=False)
+
           from sad_cin import decision_support
           import json
           
           def get_results(json_str):
               data = json.loads(json_str)
               result = decision_support(data)
+              print(result)
               return json.dumps(result)
+          
         `);
         setPyodide(pyodideInstance);
       } catch (error) {
@@ -37,7 +42,7 @@ function App() {
   }, []);
 
 
-  const handleFormSubmit = (jsonStr) => {
+  const handleFormSubmit = async (jsonStr) => {
     if (!pyodide) {
       console.error("Pyodide ainda não está carregado");
       return;
@@ -45,8 +50,9 @@ function App() {
     try {
       console.log(jsonStr);
       const getResults = pyodide.globals.get("get_results");
-      const resultString = getResults(jsonStr);
+      const resultString = await getResults(JSON.stringify(jsonStr));
       setResults(JSON.parse(resultString));
+      console.log(results)
     } catch (error) {
       console.error("Error running Python function:", error);
     }
