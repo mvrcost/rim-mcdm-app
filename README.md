@@ -1,70 +1,101 @@
-# Getting Started with Create React App
+# RIM MCDM Web App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Este repositório contém uma aplicação web desenvolvida em React com backend em Python utilizando Pyodide para integrar o modelo RIM (Robust Interactive Multi-Criteria Decision Making). A aplicação permite a entrada de alternativas, critérios e pesos para calcular rankings baseados no método RIM.
 
-## Available Scripts
+## Tecnologias Utilizadas
 
-In the project directory, you can run:
+- **Frontend:** React
+- **Backend:** Python via Pyodide
+- **Bibliotecas:**
+  - React
+  - Pyodide
+  - RIM MCDM (implementado em Python)
 
-### `npm start`
+## Instalação e Execução
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+1. Clone este repositório:
+   ```sh
+   git clone https://github.com/seu-usuario/rim-mcdm-web.git
+   cd rim-mcdm-web
+   ```
+2. Instale as dependências do frontend:
+   ```sh
+   npm install
+   ```
+3. Inicie a aplicação:
+   ```sh
+   npm start
+   ```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Estrutura do Projeto
 
-### `npm test`
+```
+ rim-mcdm-web/
+ |-- public/
+ |-- src/
+ |   |-- components/
+ |   |-- pages/
+ |   |-- utils/
+ |   |-- App.js
+ |-- package.json
+ |-- README.md
+```
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Entrada do Modelo
 
-### `npm run build`
+A aplicação recebe um JSON com as seguintes informações:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```json
+{
+  "method": "RIM",
+  "parameters": {
+    "alternatives": ["A1", "A2", "A3"],
+    "criteria": ["C1", "C2", "C3"],
+    "performance_matrix": {
+      "A1": [7, 9, 8],
+      "A2": [6, 8, 9],
+      "A3": [8, 7, 6]
+    },
+    "weights": {
+      "C1": 0.5,
+      "C2": 0.3,
+      "C3": 0.2
+    },
+    "intervals": {
+      "C1": [5, 10],
+      "C2": [6, 10],
+      "C3": [5, 10]
+    },
+    "reference_ideals": {
+      "C1": [7, 9],
+      "C2": [8, 9],
+      "C3": [6, 7]
+    }
+  }
+}
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Saída do Modelo
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+A aplicação retorna um JSON contendo o ranking das alternativas, scores e pesos normalizados:
 
-### `npm run eject`
+```json
+{
+  "method": "RIM",
+  "results": {
+    "ranking": ["A2", "A1", "A3"],
+    "scores": { "A2": 0.9, "A1": 0.8, "A3": 0.7 },
+    "weights": {
+      "C1": 0.5,
+      "C2": 0.3,
+      "C3": 0.2
+    },
+    "weighted_normalized_matrix": {
+      "A1": [0.45, 0.2, 0.15],
+      "A2": [0.5, 0.25, 0.15],
+      "A3": [0.4, 0.1, 0.2]
+    }
+  }
+}
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
