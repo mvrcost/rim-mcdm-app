@@ -16,6 +16,7 @@ function App() {
         
         await pyodideInstance.runPythonAsync(`
           import micropip
+          await micropip.install("wfrim-cin")
           await micropip.install("vikor-cin")
           await micropip.install("topsis_cin", deps=False)
           await micropip.install("rim-cin", deps=False)
