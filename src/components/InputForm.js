@@ -13,6 +13,46 @@ function InputForm({ onSubmit }) {
     C2: "max",
     C3: "min",
   });
+  const [performanceMatrix, setPerformanceMatrix] = useState({
+    A1: [7, 9, 8],
+    A2: [6, 8, 9],
+    A3: [8, 7, 6],
+  });
+  const [intervals, setIntervals] = useState({
+    C1: [5, 10],
+    C2: [6, 10],
+    C3: [5, 10],
+  });
+  const [referenceIdeals, setReferenceIdeals] = useState({
+    C1: [7, 9],
+    C2: [8, 9],
+    C3: [6, 7],
+  });
+
+  const handleMatrixChange = (alt, critIdx, value) => {
+    setPerformanceMatrix({
+      ...performanceMatrix,
+      [alt]: performanceMatrix[alt].map((v, idx) =>
+        idx === critIdx ? parseFloat(value) : v
+      ),
+    });
+  };
+
+  const handleIntervalChange = (crit, idx, value) => {
+    setIntervals({
+      ...intervals,
+      [crit]: intervals[crit].map((v, i) => (i === idx ? parseFloat(value) : v)),
+    });
+  };
+
+  const handleReferenceChange = (crit, idx, value) => {
+    setReferenceIdeals({
+      ...referenceIdeals,
+      [crit]: referenceIdeals[crit].map((v, i) =>
+        i === idx ? parseFloat(value) : v
+      ),
+    });
+  };
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -22,27 +62,15 @@ function InputForm({ onSubmit }) {
       return;
     }
     onSubmit({
-      "method": "RIM",
-      "parameters": {
-        "alternatives": alternatives,
-        "criteria": criteria,
-        "performance_matrix": {
-          "A1": [7, 9, 8],
-          "A2": [6, 8, 9],
-          "A3": [8, 7, 6]
-        },
-        "weights": weights,
-        "intervals": {
-          "C1": [5, 10],
-          "C2": [6, 10],
-          "C3": [5, 10]
-        },
-        "reference_ideals": {
-          "C1": [7, 9],
-          "C2": [8, 9],
-          "C3": [6, 7]
-        }
-      }
+      method: "RIM",
+      parameters: {
+        alternatives,
+        criteria,
+        performance_matrix: performanceMatrix,
+        weights,
+        intervals,
+        reference_ideals: referenceIdeals,
+      },
     });
   };
 
@@ -55,7 +83,9 @@ function InputForm({ onSubmit }) {
         <input
           type="text"
           value={alternatives.join(", ")}
-          onChange={(e) => setAlternatives(e.target.value.split(", ").map(item => item.trim()))}
+          onChange={(e) =>
+            setAlternatives(e.target.value.split(", ").map((item) => item.trim()))
+          }
           required
         />
       </div>
@@ -65,7 +95,9 @@ function InputForm({ onSubmit }) {
         <input
           type="text"
           value={criteria.join(", ")}
-          onChange={(e) => setCriteria(e.target.value.split(", ").map(item => item.trim()))}
+          onChange={(e) =>
+            setCriteria(e.target.value.split(", ").map((item) => item.trim()))
+          }
           required
         />
       </div>
@@ -79,16 +111,78 @@ function InputForm({ onSubmit }) {
             min="0"
             max="1"
             value={weights[crit]}
-            onChange={(e) => setWeights({ ...weights, [crit]: parseFloat(e.target.value) })}
+            onChange={(e) =>
+              setWeights({ ...weights, [crit]: parseFloat(e.target.value) })
+            }
             required
           />
           <select
             value={criteriaTypes[crit]}
-            onChange={(e) => setCriteriaTypes({ ...criteriaTypes, [crit]: e.target.value })}
+            onChange={(e) =>
+              setCriteriaTypes({ ...criteriaTypes, [crit]: e.target.value })
+            }
           >
             <option value="max">Maximizar</option>
             <option value="min">Minimizar</option>
           </select>
+        </div>
+      ))}
+
+      <h3>Matriz de Desempenho</h3>
+      {alternatives.map((alt, altIdx) => (
+        <div key={altIdx}>
+          <h4>{alt}</h4>
+          {criteria.map((crit, critIdx) => (
+            <div key={critIdx}>
+              <label>{crit}</label>
+              <input
+                type="number"
+                value={performanceMatrix[alt][critIdx]}
+                onChange={(e) =>
+                  handleMatrixChange(alt, critIdx, e.target.value)
+                }
+                required
+              />
+            </div>
+          ))}
+        </div>
+      ))}
+
+      <h3>Intervalos</h3>
+      {criteria.map((crit, idx) => (
+        <div key={idx}>
+          <label>Intervalo de {crit}</label>
+          <input
+            type="number"
+            value={intervals[crit][0]}
+            onChange={(e) => handleIntervalChange(crit, 0, e.target.value)}
+            required
+          />
+          <input
+            type="number"
+            value={intervals[crit][1]}
+            onChange={(e) => handleIntervalChange(crit, 1, e.target.value)}
+            required
+          />
+        </div>
+      ))}
+
+      <h3>Ideais de Referência</h3>
+      {criteria.map((crit, idx) => (
+        <div key={idx}>
+          <label>Ideal de {crit}</label>
+          <input
+            type="number"
+            value={referenceIdeals[crit][0]}
+            onChange={(e) => handleReferenceChange(crit, 0, e.target.value)}
+            required
+          />
+          <input
+            type="number"
+            value={referenceIdeals[crit][1]}
+            onChange={(e) => handleReferenceChange(crit, 1, e.target.value)}
+            required
+          />
         </div>
       ))}
 
